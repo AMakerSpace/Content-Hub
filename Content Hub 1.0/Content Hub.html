@@ -1045,7 +1045,13 @@
     t._h = setTimeout(function () { t.classList.remove('show'); }, 2400);
   }
 
-  function autosize(el) { el.style.height = 'auto'; el.style.height = el.scrollHeight + 'px'; }
+  /* Measuring a hidden element gives scrollHeight 0, which would pin the box
+     shut once it becomes visible. Leave it alone until it is on screen. */
+  function autosize(el) {
+    if (!el.offsetParent && el.offsetHeight === 0) { el.style.height = ''; return; }
+    el.style.height = 'auto';
+    el.style.height = el.scrollHeight + 'px';
+  }
 
   function wordCount(s) {
     var m = String(s || '').trim();
@@ -1720,6 +1726,7 @@
     $('home').classList.add('hidden');
     $('cols').classList.remove('hidden');
     $('nav').className = 'glass nav-editor';
+    autosize($('fTitle'));   // now measurable — the column just became visible
     window.scrollTo(0, 0);
   }
 
