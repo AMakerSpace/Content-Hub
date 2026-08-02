@@ -254,6 +254,46 @@
   @media (max-width: 940px) { .cols { grid-template-columns: 1fr; } }
   .stack { display: flex; flex-direction: column; gap: 16px; }
   .hidden { display: none !important; }
+
+  /* ---------------- Motion ----------------
+     Everything below animates opacity and transform only, so the work stays
+     on the compositor — no layout or repaint per frame. Durations are short
+     enough to feel immediate; nothing runs on a timer or in JS. */
+  :root { --ease: cubic-bezier(0.22, 0.61, 0.36, 1); }
+  html { scroll-behavior: smooth; }
+
+  .vid-row, .cal-cell, .chip, .icon-btn, .seg2-opt, .social-row,
+  .thumb-bar button, nav#nav #profileBtn, .up-row {
+    transition: background-color 0.18s var(--ease), border-color 0.18s var(--ease),
+                color 0.18s var(--ease), box-shadow 0.18s var(--ease),
+                transform 0.12s var(--ease);
+  }
+  .vid-row:active, .chip:active, .cal-cell.has:active { transform: scale(0.985); }
+  .proj-card { transition: transform 0.18s var(--ease), box-shadow 0.18s var(--ease); }
+  .proj-card:hover { box-shadow: 0 6px 18px rgba(28,32,50,0.1), 0 16px 36px rgba(28,32,50,0.07); }
+  .proj-card:active { transform: translateY(-1px) scale(0.994); }
+  .toast { transition: opacity 0.25s var(--ease), transform 0.25s var(--ease); }
+
+  @keyframes fadeIn  { from { opacity: 0; }                                to { opacity: 1; } }
+  @keyframes riseIn  { from { opacity: 0; transform: translateY(8px); }    to { opacity: 1; transform: none; } }
+  @keyframes sheetIn { from { opacity: 0; transform: translateY(10px) scale(0.985); } to { opacity: 1; transform: none; } }
+
+  /* Toggling [hidden] / .hidden restarts these, so views animate on every
+     entry without a line of script. */
+  .overlay:not([hidden]) { animation: fadeIn 0.18s var(--ease) both; }
+  .overlay:not([hidden]) .sheet { animation: sheetIn 0.26s var(--ease) both; }
+  .prompter:not([hidden]) { animation: fadeIn 0.2s var(--ease) both; }
+  #home:not(.hidden) { animation: riseIn 0.24s var(--ease) both; }
+  /* Opacity only: a transform on .cols would break the sticky sidebar in it. */
+  #cols:not(.hidden) { animation: fadeIn 0.22s var(--ease) both; }
+
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+    *, *::before, *::after {
+      animation-duration: 0.001ms !important;
+      transition-duration: 0.001ms !important;
+    }
+  }
 </style>
 </head>
 <body>
