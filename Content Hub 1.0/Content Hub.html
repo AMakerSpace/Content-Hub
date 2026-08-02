@@ -218,18 +218,21 @@
   .due-ok   { background: rgba(48,209,88,0.18); color: #1a7a37; }
 
   /* Home: calendar */
-  .cal-head, .cal-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 5px; }
+  /* minmax(0,1fr): without it a long unbreakable title sets the column's
+     min-content width and the day stretches across its neighbours. */
+  .cal-head, .cal-grid { display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 5px; }
   .cal-head div { text-align: center; font-size: 11px; font-weight: 700; color: var(--ink-faint); padding-bottom: 6px; letter-spacing: 0.04em; }
-  .cal-cell { min-height: 62px; border-radius: 11px; padding: 6px 7px; background: rgba(255,255,255,0.5); border: 1px solid transparent; font-size: 12px; }
+  .cal-cell { min-height: 62px; min-width: 0; overflow: hidden; border-radius: 11px; padding: 6px 7px; background: rgba(255,255,255,0.5); border: 1px solid transparent; font-size: 12px; }
   .cal-cell.out { background: transparent; color: var(--ink-faint); }
   .cal-cell.today { border-color: var(--accent); }
   .cal-cell.has { cursor: pointer; background: #fff; }
   .cal-cell.has:hover { border-color: rgba(10,132,255,0.45); }
   .cal-num { font-weight: 600; color: var(--ink-soft); }
   .cal-cell.today .cal-num { color: var(--accent); }
-  .cal-ev { display: flex; align-items: center; gap: 5px; margin-top: 4px; font-size: 11px; line-height: 1.25; }
-  .cal-ev .dot { width: 6px; height: 6px; }
-  .cal-ev span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .cal-ev { display: flex; align-items: center; gap: 5px; margin-top: 4px; min-width: 0; font-size: 11px; line-height: 1.25;
+            overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .cal-ev .dot { width: 6px; height: 6px; flex: 0 0 auto; }
+  .cal-ev span { flex: 1 1 auto; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
   .up-row { display: flex; align-items: center; gap: 10px; padding: 9px 0; border-bottom: 1px solid var(--line); font-size: 13.5px; }
   .up-row:last-child { border-bottom: none; }
 
@@ -1649,6 +1652,7 @@
             dot.style.background = statusColor(v.status);
             var label = document.createElement('span');
             label.textContent = v.title || 'Untitled';
+            ev.title = (v.title || 'Untitled') + ' — ' + v.status;   // full title on hover
             ev.appendChild(dot);
             ev.appendChild(label);
             cell.appendChild(ev);
@@ -1660,7 +1664,9 @@
             more.textContent = '+' + (evs.length - 2) + ' more';
             cell.appendChild(more);
           }
-          cell.title = evs.map(function (v) { return v.title || 'Untitled'; }).join('\n');
+          cell.title = evs.map(function (v) {
+            return '• ' + (v.title || 'Untitled') + ' — ' + v.status;
+          }).join('\n');
           cell.addEventListener('click', function () { openVideo(evs[0].id); });
         }
         grid.appendChild(cell);
