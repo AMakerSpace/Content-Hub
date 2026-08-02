@@ -153,8 +153,8 @@
   .prompter-body .cue { display: block; color: #6fb4ff; font-size: 0.55em; letter-spacing: 0.08em; text-transform: uppercase; margin: 1.2em 0 0.3em; }
 
   /* Profile / socials */
-  .avatar { width: 34px; height: 34px; border-radius: 10px; object-fit: cover; background: rgba(120,120,128,0.16); display: block; flex: none; }
-  .avatar-lg { width: 76px; height: 76px; border-radius: 20px; }
+  .avatar { width: 34px; height: 34px; border-radius: 50%; object-fit: cover; background: rgba(120,120,128,0.16); display: block; flex: none; }
+  .avatar-lg { width: 76px; height: 76px; }
   .avatar-fallback { display: flex; align-items: center; justify-content: center; font-weight: 700; color: var(--ink-soft); }
   .social-row { display: flex; align-items: center; gap: 12px; padding: 12px 0; border-bottom: 1px solid var(--line); }
   .social-row:last-child { border-bottom: none; }
@@ -196,14 +196,14 @@
   }
   nav#nav .nav-left { display: flex; align-items: center; gap: 10px; min-width: 0; }
   nav#nav .nav-right { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
-  nav#nav .brand { font-weight: 700; font-size: 16px; letter-spacing: -0.01em; white-space: nowrap; }
+  nav#nav .brand { font-weight: 700; font-size: 20px; letter-spacing: -0.015em; white-space: nowrap; }
   nav#nav #profileBtn {
     display: flex; align-items: center; gap: 10px; border: none; background: rgba(120,120,128,0.1);
     border-radius: 980px; padding: 5px 14px 5px 5px; cursor: pointer; font-family: inherit;
   }
   nav#nav #profileBtn:hover { background: rgba(120,120,128,0.18); }
   nav.nav-home { display: grid; grid-template-columns: 1fr auto 1fr; }
-  nav.nav-home .brand { text-align: center; font-size: 17px; }
+  nav.nav-home .brand { text-align: center; font-size: 22px; }
   nav.nav-home .nav-right { justify-self: end; }
   nav.nav-home #btnHome { display: none; }
   nav.nav-editor { display: flex; flex-wrap: wrap; }
