@@ -28,7 +28,7 @@
   .bg-wrap {
     min-height: 100vh;
     background: linear-gradient(180deg, #f6f7f9, #eceef2 60%, #eceef2);
-    padding: 26px 0 100px;
+    padding: 0 0 100px;
   }
   .glass {
     background: var(--card);
@@ -180,7 +180,20 @@
 
   /* Nav. On Home the wordmark takes the centre column; in the editor it moves
      to the front and the layout collapses back to a plain row. */
-  nav#nav { padding: 11px 18px; position: sticky; top: 14px; z-index: 10; align-items: center; gap: 12px; }
+  /* The bar is a floating island: it spans the window apart from a small
+     inset. Sticky lives on the wrapper — on the island itself it would be
+     pinned inside a box its own size and could never travel. */
+  .nav-bar { position: sticky; top: 0; z-index: 10; padding: 14px 20px 0; }
+  nav#nav {
+    padding: 11px 24px;
+    align-items: center; gap: 12px;
+    border-radius: 980px;   /* capsule: the short sides end as half circles */
+    -webkit-backdrop-filter: saturate(180%) blur(20px);
+    backdrop-filter: saturate(180%) blur(20px);
+    /* Safari paints the backdrop layer square unless the box clips it itself. */
+    overflow: hidden;
+    isolation: isolate;
+  }
   nav#nav .nav-left { display: flex; align-items: center; gap: 10px; min-width: 0; }
   nav#nav .nav-right { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
   nav#nav .brand { font-weight: 700; font-size: 16px; letter-spacing: -0.01em; white-space: nowrap; }
@@ -236,7 +249,7 @@
   .up-row { display: flex; align-items: center; gap: 10px; padding: 9px 0; border-bottom: 1px solid var(--line); font-size: 13.5px; }
   .up-row:last-child { border-bottom: none; }
 
-  .layout { max-width: 1180px; margin: 0 auto; padding: 0 20px; display: flex; flex-direction: column; gap: 16px; }
+  .layout { max-width: 1180px; margin: 0 auto; padding: 16px 20px 0; display: flex; flex-direction: column; gap: 16px; }
   .cols { display: grid; grid-template-columns: 290px minmax(0, 1fr); gap: 16px; align-items: start; }
   @media (max-width: 940px) { .cols { grid-template-columns: 1fr; } }
   .stack { display: flex; flex-direction: column; gap: 16px; }
@@ -345,8 +358,8 @@
 
 <!-- ================= App ================= -->
 <div class="bg-wrap" id="app" hidden>
-  <div class="layout">
 
+  <div class="nav-bar">
     <nav class="glass nav-home" id="nav">
       <div class="nav-left">
         <button class="btn btn-ghost btn-sm" id="btnHome">← Home</button>
@@ -365,6 +378,9 @@
         <button class="btn btn-primary btn-sm" id="btnExport">Export .txt</button>
       </div>
     </nav>
+  </div>
+
+  <div class="layout">
 
     <!-- ============ Home ============ -->
     <div id="home">
